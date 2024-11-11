@@ -1,4 +1,4 @@
-# anony
+# pxlnova
 
 a simple, static web proxy based off of TIW and UV to safely search on the internet
 
