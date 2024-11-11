@@ -14,6 +14,6 @@ since this web proxy is completely static, its pretty easy to deploy, or just cl
 
 ## credits
 
-* [szvy - only developer and the one writing this](https://github.com/szvy)
+* [szvy - original search files from her](https://github.com/szvy)
 * [TIW - original code came from them](https://github.com/KwazyMotoo/TIW-Static)
 * [UV - original code also came from them](https://github.com/titaniumnetwork-dev/Ultraviolet-App)
