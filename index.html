@@ -7,6 +7,24 @@
     <title>PXLNOVA</title>
     <link rel="stylesheet" href="/assets/styles.css">
     <link rel="icon" href="/assets/w.png" type="image/x-icon">
+    <style>
+      /* Style for the new button */
+      #redirectButton {
+        background-color: #6a1b9a; /* Purple color */
+        color: white; /* White text */
+        padding: 15px 30px; /* Larger padding */
+        font-size: 18px; /* Bigger font size */
+        border: none; /* Remove border */
+        border-radius: 8px; /* Rounded corners */
+        cursor: pointer; /* Pointer on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+
+      /* Hover effect */
+      #redirectButton:hover {
+        background-color: #9c4dcc; /* Lighter purple when hovering */
+      }
+    </style>
   </head>
   <body>
     <main class="main-container">
@@ -16,8 +34,8 @@
         <p class="subtext">a modern web proxy to unblock websites</p>
       </header>
       <button id="startButton" onclick="window.location.href = '/web/index.html'">Start Browsing</button>
-    
-      <button id="redirectButton" onclick="window.location.href = 'https://ruby-hub.weebly.com-'">apps</button>
+      <!-- New Button to Redirect to Another Website -->
+      <button id="redirectButton" onclick="window.location.href = 'https://ruby-hub.weebly.com'">apps</button>
     </main>
     <script src="index.js"></script>
   </body>
