@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"/>
-    <title>error</title>
+    <title>loading contents...</title>
     <link rel="shortcut icon" content="favicon.ico" />
     <link rel="stylesheet" href="/assets/styles.css" />
     <style>
@@ -57,6 +57,25 @@
         transform: scale(1.02);
       }
 
+      /* Style for the refresh button */
+      #refreshButton {
+        background-color: #6a1b9a; /* Purple color */
+        color: white; /* White text */
+        padding: 15px 30px; /* Larger padding */
+        font-size: 1.1em; /* Bigger font size */
+        border: none; /* Remove border */
+        border-radius: 8px; /* Rounded corners */
+        cursor: pointer; /* Pointer on hover */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 20px; /* Space between buttons */
+      }
+
+      /* Hover effect for the refresh button */
+      #refreshButton:hover {
+        background-color: #9c4dcc; /* Lighter purple when hovering */
+        transform: scale(1.02);
+      }
+
       @media (max-width: 480px) {
         button {
           width: 100%;
@@ -66,13 +85,16 @@
   </head>
 
   <body>
-    <h1>404 - Page Not Found</h1>
-    <p>The server could not route your request.</p>
+    <h1>404 - tip! if its taking long this could be an error</h1>
+    <p>refresh</p>
     <p id="uv-error"></p>
     <code id="uv-error-code"></code>
     <button id="uv-register-sw" value="Register service worker">
       Register ServiceWorker
     </button>
+
+    <!-- New Refresh Button -->
+    <button id="refreshButton" onclick="window.location.reload();">Refresh</button> <!-- This will reload the page -->
 
     <script src="uv/uv.bundle.js"></script>
     <script src="uv/uv.config.js"></script>
