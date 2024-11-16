@@ -1,4 +1,4 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -8,21 +8,21 @@ a<!DOCTYPE html>
     <link rel="stylesheet" href="/assets/styles.css">
     <link rel="icon" href="/assets/w.png" type="image/x-icon">
     <style>
-      /* Style for the new button */
+     
       #redirectButton {
-        background-color: #6a1b9a; /* Purple color */
-        color: white; /* White text */
-        padding: 15px 30px; /* Larger padding */
-        font-size: 18px; /* Bigger font size */
-        border: none; /* Remove border */
-        border-radius: 8px; /* Rounded corners */
-        cursor: pointer; /* Pointer on hover */
-        transition: background-color 0.3s ease; /* Smooth transition */
+        background-color: #6a1b9a; 
+        color: white; 
+        padding: 15px 30px; 
+        font-size: 18px; 
+        border: none; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease; 
       }
 
-      /* Hover effect */
+    
       #redirectButton:hover {
-        background-color: #9c4dcc; /* Lighter purple when hovering */
+        background-color: #9c4dcc; 
       }
     </style>
   </head>
@@ -34,9 +34,66 @@ a<!DOCTYPE html>
         <p class="subtext">a modern web search engine!</p>
       </header>
       <button id="startButton" onclick="window.location.href = '/web/index.html'">Start Browsing</button>
-      <!-- New Button to Redirect to Another Website -->
+     
       <button id="redirectButton" onclick="window.location.href = 'https://mathisfun-aml.pages.dev'">apps</button>
     </main>
+
+    <script>
+  
+      function detectInjectedScripts() {
+        const scripts = document.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+          const scriptSrc = scripts[i].src;
+          if (scriptSrc && !scriptSrc.includes(window.location.hostname)) {
+            console.warn('Injected script detected:', scriptSrc);
+            alert('A browser extension tried to inject a script!');
+            scripts[i].remove();  
+          }
+        }
+      }
+
+     
+      function preventRedirects() {
+        const originalPushState = history.pushState;
+        history.pushState = function(state, title, url) {
+          console.log("Redirect attempt blocked:", url);
+          alert("Redirects are blocked on this page!");
+          return originalPushState.apply(history, arguments);
+        };
+
+        const originalReplaceState = history.replaceState;
+        history.replaceState = function(state, title, url) {
+          console.log("Redirect attempt blocked:", url);
+          alert("Redirects are blocked on this page!");
+          return originalReplaceState.apply(history, arguments);
+        };
+
+  
+        const originalReload = location.reload;
+        location.reload = function() {
+          console.log("Page reload attempt blocked.");
+          alert("Page reloads are blocked!");
+        };
+      }
+
+     
+      function blockLocationChange() {
+        Object.defineProperty(window, 'location', {
+          configurable: false,
+          enumerable: true,
+          writable: false,
+          value: window.location
+        });
+      }
+
+      window.onload = function() {
+       
+        setInterval(detectInjectedScripts, 1000); 
+        preventRedirects();
+        blockLocationChange();
+      };
+
+    </script>
     <script src="index.js"></script>
   </body>
 </html>
