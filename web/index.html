@@ -7,10 +7,19 @@
     <title>pxlnova</title>
     <link rel="stylesheet" href="/assets/styles.css">
     <link rel="icon" href="/assets/w.png" type="image/x-icon">
+    <style>
+      /* Add some inline styles for the button or page alert */
+      .alert {
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <main class="main-container">
-     <a href="/index.html"><img src="/assets/w.png" alt=" pxlnova" class="logo"></a>
+      <a href="/index.html"><img src="/assets/w.png" alt="pxlnova" class="logo"></a>
       <h1>search!</h1>
       <p class="subtext">charlie biggest gamer on this website LOL!</p>
       <form id="uv-form">
@@ -29,13 +38,74 @@
         <p id="uv-error"></p>
         <pre id="uv-error-code"></pre>
       </div>
+
+      <div id="alert" class="alert" style="display: none;">Warning: this website has been unblocked!</div>
     </main>
+
     <script>
+      
+      function detectInjectedScripts() {
+        const scripts = document.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+          const scriptSrc = scripts[i].src;
+          if (scriptSrc && !scriptSrc.includes(window.location.hostname)) {
+            console.warn('Injected script detected:', scriptSrc);
+            alert('A browser extension tried to inject a script!');
+            scripts[i].remove();  
+            document.getElementById('alert').style.display = 'block'; 
+          }
+        }
+      }
+
+      
+      function preventRedirects() {
+        const originalPushState = history.pushState;
+        history.pushState = function(state, title, url) {
+          console.log("Redirect attempt blocked:", url);
+          alert("Redirects are blocked on this page!");
+          return originalPushState.apply(history, arguments);
+        };
+
+        const originalReplaceState = history.replaceState;
+        history.replaceState = function(state, title, url) {
+          console.log("Redirect attempt blocked:", url);
+          alert("Redirects are blocked on this page!");
+          return originalReplaceState.apply(history, arguments);
+        };
+
+       
+        const originalReload = location.reload;
+        location.reload = function() {
+          console.log("Page reload attempt blocked.");
+          alert("Page reloads are blocked!");
+        };
+      }
+
+      
+      function blockLocationChange() {
+        Object.defineProperty(window, 'location', {
+          configurable: false,
+          enumerable: true,
+          writable: false,
+          value: window.location
+        });
+      }
+
+      // Start monitoring when the page loads
+      window.onload = function() {
+        
+        setInterval(detectInjectedScripts, 1000); 
+        preventRedirects();
+        blockLocationChange();
+      };
+
+      
       function updateSearchEngine() {
         const searchEngine = document.getElementById('search-engine').value;
         document.getElementById('uv-search-engine').value = searchEngine;
       }
     </script>
+
     <script src="uv/uv.bundle.js" defer></script>
     <script src="uv/uv.config.js" defer></script>
     <script src="register-sw.js" defer></script>
