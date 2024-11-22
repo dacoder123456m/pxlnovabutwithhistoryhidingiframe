@@ -73,18 +73,7 @@
         document.body.className = "fullScreen";
         requestFullScreen(document.body);
       }
-
-      // Reload page when '\' is pressed
-      document.onkeydown = function (evt) {
-        evt = evt || window.event;
-        if (evt.keyCode === 220) {
-          location.reload(true);
-        }
-      };
-
-      window.onload = function () {
-        // Any additional initialization logic
-      };
+      
     </script>
     <script src="index.js"></script>
   </body>
