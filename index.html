@@ -8,7 +8,21 @@
     <link rel="stylesheet" href="/assets/styles.css">
     <link rel="icon" href="/assets/w.png" type="image/x-icon">
     <style>
-     
+      body {
+        margin: 0;
+        overflow: hidden; /* Ensure no scrollbars */
+      }
+      
+      iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: none; /* Initially hidden */
+      }
+
       #redirectButton {
         background-color: #6a1b9a; 
         color: white; 
@@ -20,7 +34,6 @@
         transition: background-color 0.3s ease; 
       }
 
-    
       #redirectButton:hover {
         background-color: #9c4dcc; 
       }
@@ -33,66 +46,45 @@
         <h1>pxlnova!</h1>
         <p class="subtext">a modern web search engine!</p>
       </header>
-      <button id="startButton" onclick="window.location.href = '/web/index.html'">Start Browsing</button>
-     
-      <button id="redirectButton" onclick="window.location.href = 'https://mathisfun-aml.pages.dev'">apps</button>
+      <button id="startButton" onclick="loadWebsite('/web/index.html')">Start Browsing</button>
+      <button id="redirectButton" onclick="loadWebsite('https://mathisfun-aml.pages.dev')">Apps</button>
     </main>
 
+    <!-- Hidden iframe -->
+    <iframe id="webFrame"></iframe>
+
     <script>
-  
-      function detectInjectedScripts() {
-        const scripts = document.getElementsByTagName('script');
-        for (let i = 0; i < scripts.length; i++) {
-          const scriptSrc = scripts[i].src;
-          if (scriptSrc && !scriptSrc.includes(window.location.hostname)) {
-            console.warn('Injected script detected:', scriptSrc);
-            alert('A browser extension tried to inject a script!');
-            scripts[i].remove();  
+      function requestFullScreen(element) {
+        var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+        if (requestMethod) {
+          requestMethod.call(element);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+          var wscript = new ActiveXObject("WScript.Shell");
+          if (wscript !== null) {
+            wscript.SendKeys("{f11}");
           }
         }
       }
 
-     
-      function preventRedirects() {
-        const originalPushState = history.pushState;
-        history.pushState = function(state, title, url) {
-          console.log("Redirect attempt blocked:", url);
-          alert("Redirects are blocked on this page!");
-          return originalPushState.apply(history, arguments);
-        };
-
-        const originalReplaceState = history.replaceState;
-        history.replaceState = function(state, title, url) {
-          console.log("Redirect attempt blocked:", url);
-          alert("Redirects are blocked on this page!");
-          return originalReplaceState.apply(history, arguments);
-        };
-
-  
-        const originalReload = location.reload;
-        location.reload = function() {
-          console.log("Page reload attempt blocked.");
-          alert("Page reloads are blocked!");
-        };
+      function loadWebsite(url) {
+        var iframe = document.getElementById("webFrame");
+        iframe.src = url;
+        iframe.style.display = "block"; // Make iframe visible
+        document.body.className = "fullScreen";
+        requestFullScreen(document.body);
       }
 
-     
-      function blockLocationChange() {
-        Object.defineProperty(window, 'location', {
-          configurable: false,
-          enumerable: true,
-          writable: false,
-          value: window.location
-        });
-      }
-
-      window.onload = function() {
-       
-        setInterval(detectInjectedScripts, 1000); 
-        preventRedirects();
-        blockLocationChange();
+      // Reload page when '\' is pressed
+      document.onkeydown = function (evt) {
+        evt = evt || window.event;
+        if (evt.keyCode === 220) {
+          location.reload(true);
+        }
       };
 
+      window.onload = function () {
+        // Any additional initialization logic
+      };
     </script>
     <script src="index.js"></script>
   </body>
