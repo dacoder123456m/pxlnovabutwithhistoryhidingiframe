@@ -15,25 +15,151 @@ iframe.active {
 }
 
 select {
-  font-family: Arial, sans-serif;
-  padding: 10px;
-  font-size: 14px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 200px;
-  margin-top: 10px;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: 500;
+  color: white;
+  background-color: #6200ee;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3);
+  font-family: 'Poppins', sans-serif;
 }
 
 select:hover {
-  background-color: #e0e0e0;
-  border-color: #888;
+  background-color: #4b00b5;
+  transform: scale(1.02);
+}
+
+select:focus {
+  border-color: #be5cff;
+  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6);
+  outline: none;
+}
+
+select option {
+  background-color: #6200ee;
+  color: white;
+}
+
+select option:hover {
+  background-color: #4b00b5;
 }
 
 select:focus {
   outline: none;
-  background-color: #ffffff;
-  border-color: #333;
+}
+
+#redirectButton {
+  background-color: #6a1b9a; 
+  color: white; 
+  padding: 15px 30px; 
+  font-size: 18px; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+#redirectButton:hover {
+  background-color: #9c4dcc; 
+}
+
+.main-container {
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(99, 0, 238, 0.603);
+  width: 90%;
+  max-width: 500px;
+}
+
+.logo {
+  width: 60px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 600;
+  color: #be5cff;
+  margin-bottom: 10px;
+}
+
+.subtext {
+  font-size: 1.2em;
+  color: #c8a2ff;
+  margin-bottom: 30px;
+}
+
+#startButton {
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: 500;
+  color: white;
+  background-color: #6200ee;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(98, 0, 238, 0.4);
+  font-family: 'Poppins', sans-serif;
+}
+
+#startButton:hover {
+  background-color: #4b00b5;
+  transform: scale(1.02);
+}
+
+#uv-address {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  font-weight: 400;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid #6200ee;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+#uv-address::placeholder {
+  color: #c8a2ff;
+  font-style: italic;
+}
+
+#uv-address:focus {
+  border-color: #be5cff;
+  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6);
+}
+
+#uv-address:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: #be5cff;
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .subtext {
+    font-size: 1em;
+  }
+
+  #startButton {
+    width: 100%;
+  }
 }
