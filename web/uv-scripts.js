@@ -43,13 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
             url = searchUrl;
         }
 
-        // If using UV, encode the URL and prefix it correctly
-        if (__uv__ && __uv__.config) {
+        // Check if __uv__ is defined before using it
+        if (typeof __uv__ !== 'undefined' && __uv__.config) {
+            // If UV is available, encode the URL and prefix it correctly
             const encodedUrl = __uv__.config.encodeUrl(url);
             const proxifiedUrl = __uv__.config.prefix + encodedUrl;
             iframe.src = proxifiedUrl;
             console.log("UV proxified URL:", proxifiedUrl);
         } else {
+            console.error("UV configuration not found. Loading direct URL.");
             iframe.src = url;  // Fallback for direct URL if UV config isn't available
             console.log("Direct URL loaded:", url);
         }
