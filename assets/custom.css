@@ -14,34 +14,33 @@ iframe.active {
   display: block;
 }
 
-/* Ensuring the same visual styling as buttons */
+/* Smaller dropdown with button-like styling */
 select {
   font-family: 'Poppins', sans-serif;
-  padding: 15px 30px;
-  font-size: 18px;
+  padding: 10px;
+  font-size: 14px;
   background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid #6200ee;
+  border: 2px solid #6200ee; /* Matching border color */
   border-radius: 8px;
-  width: 100%;
-  max-width: 400px;
+  width: 200px; /* Keeping the original size */
   margin-top: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3);
+  backdrop-filter: blur(10px); /* Adding some blur effect */
+  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3); /* Adding a subtle shadow */
 }
 
-/* Hover effect */
+/* Hover effect for dropdown */
 select:hover {
   background-color: rgba(255, 255, 255, 0.25);
-  border-color: #be5cff;
-  transform: scale(1.02);
+  border-color: #9c4dcc; /* A slightly lighter hover color */
+  transform: scale(1.02); /* Slight scale effect */
 }
 
 /* Focus effect */
 select:focus {
   outline: none;
   background-color: #ffffff;
-  border-color: #be5cff;
-  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6);
+  border-color: #be5cff; /* Lighter border when focused */
+  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6); /* Enhanced focus shadow */
 }
