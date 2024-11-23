@@ -1,10 +1,44 @@
-// Update search engine 
+"use strict";
+
+/**
+ * Utility function to check if the input is a valid URL and return the appropriate formatted URL.
+ * If not a valid URL, it will be treated as a search query and passed to the search engine template.
+ * @param {string} input
+ * @param {string} template
+ * @returns {string} Fully qualified URL or search query URL.
+ */
+function search(input, template) {
+  try {
+    // Check if input is a valid URL (https:// or http://)
+    return new URL(input).toString();
+  } catch (err) {
+    console.log("Input is not a valid URL, proceeding as a search query.");
+  }
+
+  try {
+    // Add "http://" if no protocol is provided
+    const url = new URL(`http://${input}`);
+    if (url.hostname.includes(".")) return url.toString();
+  } catch (err) {
+    console.log("Still not a valid URL, treating as search query.");
+  }
+
+  // If not a valid URL, return the search query URL formatted with the template
+  return template.replace("%s", encodeURIComponent(input));
+}
+
+/**
+ * Update the search engine URL in the config based on the input in the search box.
+ */
 function updateSearchEngine() {
   const searchEngine = document.getElementById('search-engine').value;
   document.getElementById('uv-search-engine').value = searchEngine;
 }
 
-// Request fullscreen for iframe
+/**
+ * Request fullscreen for an element.
+ * @param {Element} element
+ */
 function requestFullScreen(element) {
   var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
   if (requestMethod) {
@@ -17,31 +51,110 @@ function requestFullScreen(element) {
   }
 }
 
-// Load website into iframe
+/**
+ * Load the website into the iframe. If the input URL is a valid URL, load it.
+ * If it's not, treat it as a search query and perform a search.
+ * @param {string} url
+ */
 function loadWebsite(url) {
   const iframe = document.getElementById("webFrame");
-  // Encode the URL using UV config
-  iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+
+  // Ensure the URL is properly encoded
+  const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+
+  // Log the constructed URL for debugging
+  console.log("Loading URL:", encodedUrl);
+
+  // Ensure URL doesn't end with '?' (check for malformed URL)
+  if (encodedUrl.endsWith('?')) {
+    console.error("URL ends with '?', check the input processing.");
+  }
+
+  iframe.src = encodedUrl; // Set the iframe source
   iframe.classList.add('active'); // Make iframe visible
-  document.body.className = "fullScreen";
-  requestFullScreen(document.body);
+  document.body.className = "fullScreen"; // Fullscreen mode
+  requestFullScreen(document.body); // Request fullscreen
 }
 
-// Listen for Enter key to submit form
-document.getElementById('uv-address').addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    e.preventDefault(); // Prevent page reload
-    const input = document.getElementById('uv-address').value;
+/**
+ * Listen for the form submit event and prevent default form submission behavior.
+ */
+document.getElementById('uv-form').addEventListener('submit', function (e) {
+  e.preventDefault(); // Prevent form from submitting and reloading the page
 
-    let url;
-    // Check if input is a URL or a search query
-    if (input.startsWith('http://') || input.startsWith('https://')) {
-      url = input;
-    } else {
-      const searchEngine = document.getElementById('uv-search-engine').value;
-      url = searchEngine.replace('%s', encodeURIComponent(input));
+  const input = document.getElementById('uv-address').value;
+  console.log("User input:", input);  // Log the input for debugging
+
+  let url;
+
+  // Check if the input is a valid URL
+  if (input.startsWith('http://') || input.startsWith('https://')) {
+    url = input; // Use the URL directly
+  } else {
+    const searchEngine = document.getElementById('uv-search-engine').value;
+    url = search(input, searchEngine); // Format the search query
+  }
+
+  console.log("Final URL to load:", url);  // Log the final URL to load
+
+  loadWebsite(url); // Load the website in the iframe
+});
+
+/**
+ * Error handling function to register the Service Worker only if conditions are met.
+ * Only registers the service worker for HTTPS and allowed local hostnames.
+ */
+async function registerSW() {
+  // Ensure service workers are registered only under HTTPS and on allowed hostnames
+  if (location.protocol !== "https:" && !["localhost", "127.0.0.1"].includes(location.hostname)) {
+    throw new Error("Service workers cannot be registered without https.");
+  }
+
+  if (!navigator.serviceWorker) {
+    throw new Error("Your browser doesn't support service workers.");
+  }
+
+  // Register the service worker if conditions are met
+  const stockSW = "/web/uv-sw.js";
+  await navigator.serviceWorker.register(stockSW, {
+    scope: __uv$config.prefix,
+  });
+}
+
+// Initialize Service Worker Registration on page load
+window.addEventListener("load", () => {
+  try {
+    registerSW();
+  } catch (err) {
+    console.error("Service Worker Registration Error:", err.message);
+  }
+});
+
+/**
+ * Fix for non-string values in `split()` method to prevent errors.
+ */
+function safeSplit(input, delimiter) {
+  // Check if the input is a string
+  if (typeof input === 'string') {
+    return input.split(delimiter);
+  } else {
+    console.error("Input is not a valid string:", input);
+    return []; // Return an empty array or handle error as needed
+  }
+}
+
+/**
+ * Example usage of `safeSplit` to handle non-string values.
+ */
+document.addEventListener("DOMContentLoaded", function() {
+  try {
+    // Sample image element that might have a srcset
+    const imgElement = document.querySelector('img');
+    if (imgElement && imgElement.src) {
+      const srcSet = safeSplit(imgElement.src, ',');
+      console.log('Processed srcSet:', srcSet);
     }
-
-    loadWebsite(url); // Load the website in the iframe
+  } catch (e) {
+    console.error("Error processing elements:", e);
   }
 });
