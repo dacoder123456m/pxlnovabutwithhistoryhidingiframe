@@ -77,31 +77,27 @@ function loadWebsite(url) {
 }
 
 /**
- * Listen for the Enter key to submit the form and load the website or search query.
+ * Listen for the form submit event and prevent default form submission behavior.
  */
-document.getElementById('uv-address').addEventListener('keydown', function (e) {
-  console.log("Key pressed:", e.key);  // Log the key event for debugging
+document.getElementById('uv-form').addEventListener('submit', function (e) {
+  e.preventDefault(); // Prevent form from submitting and reloading the page
 
-  if (e.key === 'Enter') {
-    e.preventDefault(); // Prevent page reload or form submission
+  const input = document.getElementById('uv-address').value;
+  console.log("User input:", input);  // Log the input for debugging
 
-    const input = document.getElementById('uv-address').value;
-    console.log("User input:", input);  // Log the input for debugging
+  let url;
 
-    let url;
-
-    // Check if the input is a valid URL
-    if (input.startsWith('http://') || input.startsWith('https://')) {
-      url = input; // Use the URL directly
-    } else {
-      const searchEngine = document.getElementById('uv-search-engine').value;
-      url = search(input, searchEngine); // Format the search query
-    }
-
-    console.log("Final URL to load:", url);  // Log the final URL to load
-
-    loadWebsite(url); // Load the website in the iframe
+  // Check if the input is a valid URL
+  if (input.startsWith('http://') || input.startsWith('https://')) {
+    url = input; // Use the URL directly
+  } else {
+    const searchEngine = document.getElementById('uv-search-engine').value;
+    url = search(input, searchEngine); // Format the search query
   }
+
+  console.log("Final URL to load:", url);  // Log the final URL to load
+
+  loadWebsite(url); // Load the website in the iframe
 });
 
 /**
