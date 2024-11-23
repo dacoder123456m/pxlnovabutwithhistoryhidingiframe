@@ -1,27 +1,11 @@
-body.fullScreen {
-  margin: 0;
-  overflow: hidden;
-}
-
-iframe {
-  display: none;
-  width: 100vw;
-  height: 100vh;
-  border: none;
-}
-
-iframe.active {
-  display: block;
-}
-
 /* "Choose a search engine" dropdown styling */
 select {
   font-family: 'Poppins', sans-serif;
   padding: 10px;
   font-size: 14px;
-  background-color: #6a1b9a; /* Same background color as the button */
+  background-color: #7b2a8b; /* Slightly adjusted color from #6a1b9a */
   color: white; /* White text */
-  border: 2px solid #6200ee; /* Matching border color */
+  border: 2px solid #5e1a75; /* Darker border for contrast */
   border-radius: 8px;
   width: 200px; /* Same size as the previous dropdown */
   margin-top: 10px;
@@ -32,15 +16,15 @@ select {
 
 /* Hover effect for the dropdown */
 select:hover {
-  background-color: #9c4dcc; /* Lighten the background on hover */
-  border-color: #9c4dcc; /* Match border color on hover */
+  background-color: #9b44b3; /* Lighten the background on hover */
+  border-color: #7b2a8b; /* Match border color on hover */
   transform: scale(1.02); /* Slight scale effect */
 }
 
 /* Focus effect */
 select:focus {
   outline: none;
-  background-color: #9c4dcc; /* Same as hover */
+  background-color: #9b44b3; /* Same as hover */
   border-color: #be5cff; /* Lighter border color on focus */
   box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6); /* Enhanced shadow */
 }
