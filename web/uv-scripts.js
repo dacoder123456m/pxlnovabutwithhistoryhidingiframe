@@ -146,3 +146,53 @@ document.addEventListener("DOMContentLoaded", function() {
     console.error("Error processing elements:", e);
   }
 });
+
+/**
+ * Initialize UV
+ */
+const uv = new UV({
+  name: "custom-uv",  // Name of the UV instance
+  basePath: "/web/uv",  // Base path where Ultraviolet is hosted
+  cache: true,  // Cache settings
+  autoInit: true,  // Automatically initialize
+  enableCacheBusting: true,  // Enable cache busting for updates
+  clearCache: true,  // Clear the cache on each page load (for testing)
+  enableLogging: true,  // Enable logging for debugging purposes
+  logLevel: 3,  // Set logging level (0-4) for verbosity
+});
+
+// Event listeners for custom search functionality
+document.getElementById("search-input").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    const query = this.value;
+    uv.search(query).then(results => {
+      displaySearchResults(results);
+    }).catch(err => {
+      console.error("Search failed", err);
+    });
+  }
+});
+
+// Function to display search results
+function displaySearchResults(results) {
+  const resultsContainer = document.getElementById("search-results");
+  resultsContainer.innerHTML = "";  // Clear previous results
+
+  if (results && results.length > 0) {
+    results.forEach(result => {
+      const resultItem = document.createElement("div");
+      resultItem.className = "result-item";
+      resultItem.innerHTML = `<a href="${result.url}">${result.title}</a>`;
+      resultsContainer.appendChild(resultItem);
+    });
+  } else {
+    resultsContainer.innerHTML = "<p>No results found.</p>";
+  }
+}
+
+// Initialize UV
+uv.init().then(() => {
+  console.log("UV initialized successfully.");
+}).catch(err => {
+  console.error("UV initialization failed", err);
+});
