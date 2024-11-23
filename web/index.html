@@ -27,7 +27,7 @@
 </head>
 <body>
   <main class="main-container">
-    <a href="/index.html"><img src="/assets/w.png" alt="pxlnova" class="logo"></a>
+    <a href='/'><img src="/assets/w.png" alt="pxlnova" class="logo"></a>
     <h1>search!</h1>
     <p id="subtext"></p>
     <form id="uv-form">
@@ -62,7 +62,7 @@
       document.getElementById('uv-search-engine').value = searchEngine;
     }
 
-    // Load website into iframe
+    // Request fullscreen for iframe
     function requestFullScreen(element) {
       var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
       if (requestMethod) {
@@ -75,21 +75,23 @@
       }
     }
 
+    // Load website into iframe
     function loadWebsite(url) {
       const iframe = document.getElementById("webFrame");
-      iframe.src = url;
+      // Encode the URL using UV config
+      iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
       iframe.classList.add('active'); // Make iframe visible
       document.body.className = "fullScreen";
       requestFullScreen(document.body);
     }
 
-    // Handle form submission on Enter key press
+    // Listen for Enter key to submit form
     document.getElementById('uv-address').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent form reload on Enter
+        e.preventDefault(); // Prevent page reload
         const input = document.getElementById('uv-address').value;
+
         let url;
-        
         // Check if input is a URL or a search query
         if (input.startsWith('http://') || input.startsWith('https://')) {
           url = input;
