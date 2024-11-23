@@ -33,7 +33,6 @@
     <form id="uv-form">
       <input id="uv-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
       <input id="uv-address" type="text" placeholder="search google or type a url" class="form__input" />
-      <button type="submit">Go</button>
     </form>
     <div>
       <label for="search-engine">choose a search engine:</label>
@@ -63,7 +62,7 @@
       document.getElementById('uv-search-engine').value = searchEngine;
     }
 
-    // Request fullscreen for iframe
+    // Load website into iframe
     function requestFullScreen(element) {
       var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
       if (requestMethod) {
@@ -76,11 +75,9 @@
       }
     }
 
-    // Load website into iframe
     function loadWebsite(url) {
       const iframe = document.getElementById("webFrame");
-      // Encode the URL using UV config
-      iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+      iframe.src = url;
       iframe.classList.add('active'); // Make iframe visible
       document.body.className = "fullScreen";
       requestFullScreen(document.body);
@@ -100,6 +97,13 @@
       }
 
       loadWebsite(url);
+    });
+
+    // Trigger form submission when Enter is pressed
+    document.getElementById('uv-address').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        document.getElementById('uv-form').submit();
+      }
     });
   </script>
 </body>
