@@ -1,3 +1,19 @@
+body.fullScreen {
+  margin: 0;
+  overflow: hidden;
+}
+
+iframe {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  border: none;
+}
+
+iframe.active {
+  display: block;
+}
+
 /* Ensuring the same visual styling as buttons */
 select {
   font-family: 'Poppins', sans-serif;
