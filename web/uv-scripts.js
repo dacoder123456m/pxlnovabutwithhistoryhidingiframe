@@ -58,22 +58,12 @@ function requestFullScreen(element) {
  */
 function loadWebsite(url) {
   const iframe = document.getElementById("webFrame");
-
-  // Ensure the URL is properly encoded
   const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
-
-  // Log the constructed URL for debugging
-  console.log("Loading URL:", encodedUrl);
-
-  // Ensure URL doesn't end with '?' (check for malformed URL)
-  if (encodedUrl.endsWith('?')) {
-    console.error("URL ends with '?', check the input processing.");
-  }
-
-  iframe.src = encodedUrl; // Set the iframe source
-  iframe.classList.add('active'); // Make iframe visible
-  document.body.className = "fullScreen"; // Fullscreen mode
-  requestFullScreen(document.body); // Request fullscreen
+  console.log("Loading URL:", encodedUrl); // Check the final URL
+  iframe.src = encodedUrl;
+  iframe.classList.add('active');
+  document.body.className = "fullScreen";
+  requestFullScreen(document.body);
 }
 
 /**
