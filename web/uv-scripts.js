@@ -58,13 +58,22 @@ function requestFullScreen(element) {
  */
 function loadWebsite(url) {
   const iframe = document.getElementById("webFrame");
+
   // Encode the URL using UV config
   const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
-  console.log("Loading URL:", encodedUrl); // Debugging log
-  iframe.src = encodedUrl;
+
+  // Log the constructed URL for debugging
+  console.log("Loading URL:", encodedUrl);
+
+  // Ensure that the URL is valid and doesn't have any extra characters
+  if (encodedUrl.endsWith('?')) {
+    console.error("URL ends with '?', check the input processing.");
+  }
+
+  iframe.src = encodedUrl; // Set the iframe source
   iframe.classList.add('active'); // Make iframe visible
-  document.body.className = "fullScreen";
-  requestFullScreen(document.body);
+  document.body.className = "fullScreen"; // Fullscreen mode
+  requestFullScreen(document.body); // Request fullscreen
 }
 
 /**
@@ -72,16 +81,17 @@ function loadWebsite(url) {
  */
 document.getElementById('uv-address').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
-    e.preventDefault(); // Prevent page reload
-    const input = document.getElementById('uv-address').value;
+    e.preventDefault(); // Prevent page reload or form submission
 
+    const input = document.getElementById('uv-address').value;
     let url;
-    // Check if input is a valid URL or a search query
+
+    // Check if the input is a valid URL
     if (input.startsWith('http://') || input.startsWith('https://')) {
-      url = input; // Direct URL
+      url = input; // Use the URL directly
     } else {
       const searchEngine = document.getElementById('uv-search-engine').value;
-      url = search(input, searchEngine); // Perform search if it's not a valid URL
+      url = search(input, searchEngine); // Format the search query
     }
 
     loadWebsite(url); // Load the website in the iframe
@@ -144,20 +154,5 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   } catch (e) {
     console.error("Error processing elements:", e);
-  }
-});
-
-/**
- * Initialize UV functionality after the page is loaded.
- */
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof UV !== 'undefined') {
-    console.log('UV is initialized:', UV); // UV is available, proceed with functionality
-
-    // Existing functionality that uses UV
-    // Add any other code that interacts with UV here
-  } else {
-    console.error('UV is not initialized');
-    // Optionally, handle the error gracefully or load fallback logic here
   }
 });
