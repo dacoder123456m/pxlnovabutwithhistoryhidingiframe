@@ -1,62 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UV Proxy Loader</title>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PXLNOVA</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <link rel="icon" href="/assets/w.png" type="image/x-icon">
+  <style>
+    body.fullScreen {
+      margin: 0;
+      overflow: hidden;
+    }
 
-      iframe {
-        width: 100vw;
-        height: 100vh;
-        border: none;
-      }
-    </style>
-  </head>
-  <body>
+    iframe {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+
+    iframe.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="main-container">
+    <a href="/index.html"><img src="/assets/w.png" alt="pxlnova" class="logo"></a>
+    <h1>search!</h1>
+    <p id="subtext"></p>
     <form id="uv-form">
-      <input
-        id="uv-address"
-        type="text"
-        placeholder="Enter a URL or search term"
-        style="width: 80%; padding: 8px;"
-      />
-      <button type="submit" style="padding: 8px;">Go</button>
+      <input id="uv-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
+      <input id="uv-address" type="text" placeholder="search google or type a url" class="form__input" />
+      <button type="submit">Go</button>
     </form>
+    <div>
+      <label for="search-engine">choose a search engine:</label>
+      <select id="search-engine" onchange="updateSearchEngine()">
+        <option value="https://www.google.com/search?q=%s">google</option>
+        <option value="https://duckduckgo.com/?q=%s">duckduckgo</option>
+        <option value="https://search.yahoo.com/search?p=%s">yahoo</option>
+      </select>
+    </div>
+    <div class="desc left-margin">
+      <p id="uv-error"></p>
+      <pre id="uv-error-code"></pre>
+    </div>
+    <div id="alert" class="alert" style="display: none;">Warning: this website has been unblocked!</div>
+  </main>
 
-    <iframe id="uv-frame" src="about:blank"></iframe>
+  <!-- Hidden iframe -->
+  <iframe id="webFrame"></iframe>
 
-    <!-- Include UV core scripts -->
-    <script src="/uv/uv.bundle.js"></script>
-    <script src="/uv/uv.config.js"></script>
+  <script src="/web/uv/uv.bundle.js"></script>
+  <script src="/web/uv/uv.config.js"></script>
 
-    <script>
-      const uvForm = document.getElementById("uv-form");
-      const uvAddress = document.getElementById("uv-address");
-      const uvFrame = document.getElementById("uv-frame");
+  <script>
+    // Update search engine
+    function updateSearchEngine() {
+      const searchEngine = document.getElementById('search-engine').value;
+      document.getElementById('uv-search-engine').value = searchEngine;
+    }
 
-      uvForm.addEventListener("submit", (e) => {
-        e.preventDefault(); // Prevent default form submission
-
-        const input = uvAddress.value.trim();
-        if (!input) return;
-
-        let url;
-        if (input.startsWith("http://") || input.startsWith("https://")) {
-          url = input;
-        } else {
-          // Default to Google search if no protocol is provided
-          url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+    // Load website into iframe
+    function requestFullScreen(element) {
+      var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+      if (requestMethod) {
+        requestMethod.call(element);
+      } else if (typeof window.ActiveXObject !== "undefined") {
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+          wscript.SendKeys("{f11}");
         }
+      }
+    }
 
-        // Load the proxied URL into the iframe using UV
-        const proxiedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
-        uvFrame.src = proxiedUrl;
-      });
-    </script>
-  </body>
+    function loadWebsite(url) {
+      const iframe = document.getElementById("webFrame");
+      iframe.src = url;
+      iframe.classList.add('active'); // Make iframe visible
+      document.body.className = "fullScreen";
+      requestFullScreen(document.body);
+    }
+
+    document.getElementById('uv-form').addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent page reload
+      const input = document.getElementById('uv-address').value;
+
+      let url;
+      // Check if input is a URL or a search query
+      if (input.startsWith('http://') || input.startsWith('https://')) {
+        url = input;
+      } else {
+        const searchEngine = document.getElementById('uv-search-engine').value;
+        url = searchEngine.replace('%s', encodeURIComponent(input));
+      }
+
+      loadWebsite(url);
+    });
+  </script>
+</body>
 </html>
