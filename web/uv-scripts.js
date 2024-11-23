@@ -12,7 +12,7 @@ function search(input, template) {
     // Check if input is a valid URL (https:// or http://)
     return new URL(input).toString();
   } catch (err) {
-    // Not a valid URL, try adding "http://" to the input and check
+    console.log("Input is not a valid URL, proceeding as a search query.");
   }
 
   try {
@@ -20,7 +20,7 @@ function search(input, template) {
     const url = new URL(`http://${input}`);
     if (url.hostname.includes(".")) return url.toString();
   } catch (err) {
-    // Not a valid URL with "http://" prepended, treat as a search query
+    console.log("Still not a valid URL, treating as search query.");
   }
 
   // If not a valid URL, return the search query URL formatted with the template
@@ -59,13 +59,13 @@ function requestFullScreen(element) {
 function loadWebsite(url) {
   const iframe = document.getElementById("webFrame");
 
-  // Encode the URL using UV config
+  // Ensure the URL is properly encoded
   const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
 
   // Log the constructed URL for debugging
   console.log("Loading URL:", encodedUrl);
 
-  // Ensure that the URL is valid and doesn't have any extra characters
+  // Ensure URL doesn't end with '?' (check for malformed URL)
   if (encodedUrl.endsWith('?')) {
     console.error("URL ends with '?', check the input processing.");
   }
@@ -80,10 +80,14 @@ function loadWebsite(url) {
  * Listen for the Enter key to submit the form and load the website or search query.
  */
 document.getElementById('uv-address').addEventListener('keydown', function (e) {
+  console.log("Key pressed:", e.key);  // Log the key event for debugging
+
   if (e.key === 'Enter') {
     e.preventDefault(); // Prevent page reload or form submission
 
     const input = document.getElementById('uv-address').value;
+    console.log("User input:", input);  // Log the input for debugging
+
     let url;
 
     // Check if the input is a valid URL
@@ -93,6 +97,8 @@ document.getElementById('uv-address').addEventListener('keydown', function (e) {
       const searchEngine = document.getElementById('uv-search-engine').value;
       url = search(input, searchEngine); // Format the search query
     }
+
+    console.log("Final URL to load:", url);  // Log the final URL to load
 
     loadWebsite(url); // Load the website in the iframe
   }
