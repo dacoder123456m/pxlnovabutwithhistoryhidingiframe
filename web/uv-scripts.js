@@ -117,3 +117,32 @@ window.addEventListener("load", () => {
     console.error("Service Worker Registration Error:", err.message);
   }
 });
+
+/**
+ * Fix for non-string values in `split()` method to prevent errors.
+ */
+function safeSplit(input, delimiter) {
+  // Check if the input is a string
+  if (typeof input === 'string') {
+    return input.split(delimiter);
+  } else {
+    console.error("Input is not a valid string:", input);
+    return []; // Return an empty array or handle error as needed
+  }
+}
+
+/**
+ * Example usage of `safeSplit` to handle non-string values.
+ */
+document.addEventListener("DOMContentLoaded", function() {
+  try {
+    // Sample image element that might have a srcset
+    const imgElement = document.querySelector('img');
+    if (imgElement && imgElement.src) {
+      const srcSet = safeSplit(imgElement.src, ',');
+      console.log('Processed srcSet:', srcSet);
+    }
+  } catch (e) {
+    console.error("Error processing elements:", e);
+  }
+});
