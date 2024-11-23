@@ -1,36 +1,44 @@
 "use strict";
 
-// Error handling and URL handling function (supports non-https URLs)
+/**
+ * Utility function to check if the input is a valid URL and return the appropriate formatted URL.
+ * If not a valid URL, it will be treated as a search query and passed to the search engine template.
+ * @param {string} input
+ * @param {string} template
+ * @returns {string} Fully qualified URL or search query URL.
+ */
 function search(input, template) {
   try {
-    // input is a valid URL: eg: https://example.com, https://example.com/test?q=param
+    // Check if input is a valid URL (https:// or http://)
     return new URL(input).toString();
   } catch (err) {
-    // input was not a valid URL
+    // Not a valid URL, try adding "http://" to the input and check
   }
 
   try {
-    // input is a valid URL when http:// is added to the start: eg: example.com
+    // Add "http://" if no protocol is provided
     const url = new URL(`http://${input}`);
-    // only if the hostname has a TLD/subdomain
     if (url.hostname.includes(".")) return url.toString();
   } catch (err) {
-    // input was not a valid URL
+    // Not a valid URL with "http://" prepended, treat as a search query
   }
 
-  // input may have been a valid URL, however the hostname was invalid
-  // Attempts to convert the input to a fully qualified URL have failed
-  // Treat the input as a search query
+  // If not a valid URL, return the search query URL formatted with the template
   return template.replace("%s", encodeURIComponent(input));
 }
 
-// Update search engine
+/**
+ * Update the search engine URL in the config based on the input in the search box.
+ */
 function updateSearchEngine() {
   const searchEngine = document.getElementById('search-engine').value;
   document.getElementById('uv-search-engine').value = searchEngine;
 }
 
-// Request fullscreen for iframe
+/**
+ * Request fullscreen for an element.
+ * @param {Element} element
+ */
 function requestFullScreen(element) {
   var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
   if (requestMethod) {
@@ -43,60 +51,69 @@ function requestFullScreen(element) {
   }
 }
 
-// Load website into iframe
+/**
+ * Load the website into the iframe. If the input URL is a valid URL, load it.
+ * If it's not, treat it as a search query and perform a search.
+ * @param {string} url
+ */
 function loadWebsite(url) {
   const iframe = document.getElementById("webFrame");
   // Encode the URL using UV config
-  iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+  const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+  console.log("Loading URL:", encodedUrl); // Debugging log
+  iframe.src = encodedUrl;
   iframe.classList.add('active'); // Make iframe visible
   document.body.className = "fullScreen";
   requestFullScreen(document.body);
 }
 
-// Listen for Enter key to submit form
+/**
+ * Listen for the Enter key to submit the form and load the website or search query.
+ */
 document.getElementById('uv-address').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     e.preventDefault(); // Prevent page reload
     const input = document.getElementById('uv-address').value;
 
     let url;
-    // Check if input is a URL or a search query
+    // Check if input is a valid URL or a search query
     if (input.startsWith('http://') || input.startsWith('https://')) {
-      url = input;
+      url = input; // Direct URL
     } else {
       const searchEngine = document.getElementById('uv-search-engine').value;
-      url = searchEngine.replace('%s', encodeURIComponent(input));
+      url = search(input, searchEngine); // Perform search if it's not a valid URL
     }
 
     loadWebsite(url); // Load the website in the iframe
   }
 });
 
-// Service Worker Registration
-const stockSW = "/web/uv-sw.js";
-const swAllowedHostnames = ["localhost", "127.0.0.1"];
-
+/**
+ * Error handling function to register the Service Worker only if conditions are met.
+ * Only registers the service worker for HTTPS and allowed local hostnames.
+ */
 async function registerSW() {
-  if (
-    location.protocol !== "https:" &&
-    !swAllowedHostnames.includes(location.hostname)
-  )
+  // Ensure service workers are registered only under HTTPS and on allowed hostnames
+  if (location.protocol !== "https:" && !["localhost", "127.0.0.1"].includes(location.hostname)) {
     throw new Error("Service workers cannot be registered without https.");
+  }
 
-  if (!navigator.serviceWorker)
+  if (!navigator.serviceWorker) {
     throw new Error("Your browser doesn't support service workers.");
+  }
 
-  // Ultraviolet has a stock `sw.js` script.
+  // Register the service worker if conditions are met
+  const stockSW = "/web/uv-sw.js";
   await navigator.serviceWorker.register(stockSW, {
     scope: __uv$config.prefix,
   });
 }
 
-// Register service worker on page load
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize Service Worker Registration on page load
+window.addEventListener("load", () => {
   try {
     registerSW();
-  } catch (error) {
-    console.error('Service Worker registration failed:', error);
+  } catch (err) {
+    console.error("Service Worker Registration Error:", err.message);
   }
 });
