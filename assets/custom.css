@@ -14,33 +14,69 @@ iframe.active {
   display: block;
 }
 
-/* Smaller dropdown with button-like styling */
+/* "Choose a search engine" dropdown styling */
 select {
   font-family: 'Poppins', sans-serif;
   padding: 10px;
   font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #6a1b9a; /* Same background color as the button */
+  color: white; /* White text */
   border: 2px solid #6200ee; /* Matching border color */
   border-radius: 8px;
-  width: 200px; /* Keeping the original size */
+  width: 200px; /* Same size as the previous dropdown */
   margin-top: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-  backdrop-filter: blur(10px); /* Adding some blur effect */
-  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3); /* Adding a subtle shadow */
+  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3); /* Subtle shadow */
 }
 
-/* Hover effect for dropdown */
+/* Hover effect for the dropdown */
 select:hover {
-  background-color: rgba(255, 255, 255, 0.25);
-  border-color: #9c4dcc; /* A slightly lighter hover color */
+  background-color: #9c4dcc; /* Lighten the background on hover */
+  border-color: #9c4dcc; /* Match border color on hover */
   transform: scale(1.02); /* Slight scale effect */
 }
 
 /* Focus effect */
 select:focus {
   outline: none;
-  background-color: #ffffff;
-  border-color: #be5cff; /* Lighter border when focused */
-  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6); /* Enhanced focus shadow */
+  background-color: #9c4dcc; /* Same as hover */
+  border-color: #be5cff; /* Lighter border color on focus */
+  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6); /* Enhanced shadow */
+}
+
+/* URL input field (matching size and style) */
+#uv-address {
+  padding: 12px 20px;
+  font-size: 1.3em; /* Slightly larger font size */
+  font-weight: 400;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid #6200ee;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Placeholder styling */
+#uv-address::placeholder {
+  color: #c8a2ff;
+  font-style: italic;
+}
+
+/* Focus effect on the URL input */
+#uv-address:focus {
+  border-color: #be5cff;
+  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6);
+}
+
+/* Hover effect on the URL input */
+#uv-address:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: #be5cff;
 }
