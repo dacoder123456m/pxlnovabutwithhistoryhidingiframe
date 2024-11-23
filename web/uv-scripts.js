@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log("uv-scripts.js loaded");
 
+    const urlInput = document.getElementById("urlInput");
+    const searchForm = document.getElementById("searchForm");
+
+    // Check if the elements exist
+    if (!urlInput) {
+        console.error("Error: urlInput element not found.");
+        return;
+    }
+    if (!searchForm) {
+        console.error("Error: searchForm element not found.");
+        return;
+    }
+
     // Function to handle loading of websites in the iframe
     function loadWebsite(url) {
         const iframe = document.getElementById("webFrame");
@@ -49,10 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event listener for form submission or URL input
-    const urlInput = document.getElementById("urlInput");
-    const searchForm = document.getElementById("searchForm");
-
-    // If the form is submitted (Enter key or button press)
     searchForm.addEventListener("submit", function(event) {
         event.preventDefault();
         const userInput = urlInput.value.trim();
