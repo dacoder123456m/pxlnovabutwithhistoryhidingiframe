@@ -83,26 +83,22 @@
       requestFullScreen(document.body);
     }
 
-    document.getElementById('uv-form').addEventListener('submit', function (e) {
-      e.preventDefault(); // Prevent page reload
-      const input = document.getElementById('uv-address').value;
-
-      let url;
-      // Check if input is a URL or a search query
-      if (input.startsWith('http://') || input.startsWith('https://')) {
-        url = input;
-      } else {
-        const searchEngine = document.getElementById('uv-search-engine').value;
-        url = searchEngine.replace('%s', encodeURIComponent(input));
-      }
-
-      loadWebsite(url);
-    });
-
-    // Trigger form submission when Enter is pressed
-    document.getElementById('uv-address').addEventListener('keypress', function (e) {
+    // Handle form submission on Enter key press
+    document.getElementById('uv-address').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
-        document.getElementById('uv-form').submit();
+        e.preventDefault(); // Prevent form reload on Enter
+        const input = document.getElementById('uv-address').value;
+        let url;
+        
+        // Check if input is a URL or a search query
+        if (input.startsWith('http://') || input.startsWith('https://')) {
+          url = input;
+        } else {
+          const searchEngine = document.getElementById('uv-search-engine').value;
+          url = searchEngine.replace('%s', encodeURIComponent(input));
+        }
+
+        loadWebsite(url); // Load the website in the iframe
       }
     });
   </script>
