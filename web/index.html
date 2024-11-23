@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>pxlnova</title>
-    <link rel="stylesheet" href="/assets/styles.css">
-    <link rel="icon" href="/assets/w.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="icon" href="/assets/w.png" type="image/x-icon" />
     <style>
       body.fullScreen {
         margin: 0;
@@ -27,7 +27,7 @@
   </head>
   <body>
     <main class="main-container">
-      <a href="/index.html"><img src="/assets/w.png" alt="pxlnova" class="logo"></a>
+      <a href="/index.html"><img src="/assets/w.png" alt="pxlnova" class="logo" /></a>
       <h1>search!</h1>
       <p id="subtext">
         <!-- Random Placeholder Script -->
@@ -114,7 +114,7 @@ const options = [
     "Mission failed, we will get them next time",
     "NUKE INCOMING!",
     "I spent too much time making these"
- ];
+];
 
           function getRandomOption() {
             const randomNumber = Math.floor(Math.random() * options.length);
@@ -130,8 +130,17 @@ const options = [
         </script>
       </p>
       <form id="uv-form">
-        <input id="uv-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
-        <input id="uv-address" type="text" placeholder="search google or type a url" class="form__input" />
+        <input
+          id="uv-search-engine"
+          value="https://www.google.com/search?q=%s"
+          type="hidden"
+        />
+        <input
+          id="uv-address"
+          type="text"
+          placeholder="search google or type a url"
+          class="form__input"
+        />
         <button type="submit">Go</button>
       </form>
       <div>
@@ -146,7 +155,9 @@ const options = [
         <p id="uv-error"></p>
         <pre id="uv-error-code"></pre>
       </div>
-      <div id="alert" class="alert" style="display: none;">Warning: this website has been unblocked!</div>
+      <div id="alert" class="alert" style="display: none;">
+        Warning: this website has been unblocked!
+      </div>
     </main>
 
     <!-- Hidden iframe -->
@@ -155,45 +166,27 @@ const options = [
     <script>
       // Update search engine
       function updateSearchEngine() {
-        const searchEngine = document.getElementById('search-engine').value;
-        document.getElementById('uv-search-engine').value = searchEngine;
+        const searchEngine = document.getElementById("search-engine").value;
+        document.getElementById("uv-search-engine").value = searchEngine;
       }
 
-      // Load website into iframe
-      function requestFullScreen(element) {
-        var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
-        if (requestMethod) {
-          requestMethod.call(element);
-        } else if (typeof window.ActiveXObject !== "undefined") {
-          var wscript = new ActiveXObject("WScript.Shell");
-          if (wscript !== null) {
-            wscript.SendKeys("{f11}");
-          }
-        }
-      }
-
-      function loadWebsite(url) {
-        const iframe = document.getElementById("webFrame");
-        iframe.src = url;
-        iframe.classList.add('active'); // Make iframe visible
-        document.body.className = "fullScreen";
-        requestFullScreen(document.body);
-      }
-
-      document.getElementById('uv-form').addEventListener('submit', function (e) {
+      document.getElementById("uv-form").addEventListener("submit", function (e) {
         e.preventDefault(); // Prevent page reload
-        const input = document.getElementById('uv-address').value;
+        const input = document.getElementById("uv-address").value;
 
         let url;
         // Check if input is a URL or a search query
-        if (input.startsWith('http://') || input.startsWith('https://')) {
+        if (input.startsWith("http://") || input.startsWith("https://")) {
           url = input;
         } else {
-          const searchEngine = document.getElementById('uv-search-engine').value;
-          url = searchEngine.replace('%s', encodeURIComponent(input));
+          const searchEngine = document.getElementById("uv-search-engine").value;
+          url = searchEngine.replace("%s", encodeURIComponent(input));
         }
 
-        loadWebsite(url);
+        const iframe = document.getElementById("webFrame");
+        iframe.src = "/uv/service/" + btoa(url); // Proxy URL using UV
+        iframe.classList.add("active"); // Make iframe visible
+        document.body.className = "fullScreen";
       });
     </script>
   </body>
