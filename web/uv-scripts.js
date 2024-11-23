@@ -25,6 +25,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // Function to request fullscreen for the iframe
+    function requestFullScreen(element) {
+        var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+        if (requestMethod) {
+            requestMethod.call(element);
+            console.log("Fullscreen requested for", element);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{f11}");
+                console.log("Fullscreen request triggered via ActiveX");
+            }
+        }
+    }
+
     // Function to load the website in the iframe
     function loadWebsite(url) {
         console.log("Attempting to load URL:", url);
@@ -50,6 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Handle iframe load
         iframe.onload = function () {
             console.log("Iframe content loaded:", url);
+            // Request fullscreen when iframe loads
+            requestFullScreen(iframe);
         };
 
         // Handle iframe error
