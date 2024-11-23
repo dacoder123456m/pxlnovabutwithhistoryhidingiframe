@@ -145,11 +145,19 @@ document.addEventListener("DOMContentLoaded", function() {
   } catch (e) {
     console.error("Error processing elements:", e);
   }
+});
 
-  // Ensure UV is properly initialized before using it
+/**
+ * Initialize UV functionality after the page is loaded.
+ */
+document.addEventListener("DOMContentLoaded", function() {
   if (typeof UV !== 'undefined') {
-    console.log('UV is initialized:', UV); // Verify UV is available
+    console.log('UV is initialized:', UV); // UV is available, proceed with functionality
+
+    // Existing functionality that uses UV
+    // Add any other code that interacts with UV here
   } else {
     console.error('UV is not initialized');
+    // Optionally, handle the error gracefully or load fallback logic here
   }
 });
