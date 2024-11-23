@@ -63,7 +63,7 @@
       document.getElementById('uv-search-engine').value = searchEngine;
     }
 
-    // Load website into iframe
+    // Request fullscreen for iframe
     function requestFullScreen(element) {
       var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
       if (requestMethod) {
@@ -76,9 +76,11 @@
       }
     }
 
+    // Load website into iframe
     function loadWebsite(url) {
       const iframe = document.getElementById("webFrame");
-      iframe.src = url;
+      // Encode the URL using UV config
+      iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
       iframe.classList.add('active'); // Make iframe visible
       document.body.className = "fullScreen";
       requestFullScreen(document.body);
