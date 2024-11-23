@@ -92,39 +92,6 @@ h1 {
   transform: scale(1.02);
 }
 
-#uv-address {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  font-weight: 400;
-  color: white;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid #6200ee;
-  border-radius: 8px;
-  outline: none;
-  width: 100%;
-  max-width: 400px;
-  margin: 10px 0;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(98, 0, 238, 0.3);
-  font-family: 'Poppins', sans-serif;
-}
-
-#uv-address::placeholder {
-  color: #c8a2ff;
-  font-style: italic;
-}
-
-#uv-address:focus {
-  border-color: #be5cff;
-  box-shadow: 0 4px 15px rgba(99, 0, 238, 0.6);
-}
-
-#uv-address:hover {
-  background-color: rgba(255, 255, 255, 0.25);
-  border-color: #be5cff;
-}
-
 @media (max-width: 480px) {
   h1 {
     font-size: 1.8em;
