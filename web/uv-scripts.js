@@ -8,20 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const iframe = document.getElementById("webFrame");
 
     // Check if the elements are available in the DOM
-    if (!urlInput) {
-        console.error("Error: uv-address input not found.");
-        return;
-    }
-    if (!searchForm) {
-        console.error("Error: uv-form not found.");
-        return;
-    }
-    if (!searchEngineSelect) {
-        console.error("Error: search-engine select not found.");
-        return;
-    }
-    if (!iframe) {
-        console.error("Error: iframe not found.");
+    if (!urlInput || !searchForm || !searchEngineSelect || !iframe) {
+        console.error("Error: One or more essential DOM elements are missing.");
         return;
     }
 
@@ -55,14 +43,21 @@ document.addEventListener('DOMContentLoaded', function () {
             url = searchUrl;
         }
 
-        // Set iframe properties and load the URL
+        // If using UV, encode the URL and prefix it correctly
+        if (__uv__ && __uv__.config) {
+            const encodedUrl = __uv__.config.encodeUrl(url);
+            const proxifiedUrl = __uv__.config.prefix + encodedUrl;
+            iframe.src = proxifiedUrl;
+            console.log("UV proxified URL:", proxifiedUrl);
+        } else {
+            iframe.src = url;  // Fallback for direct URL if UV config isn't available
+            console.log("Direct URL loaded:", url);
+        }
+
+        // Set iframe properties and make it visible
         iframe.style.width = "100vw";
         iframe.style.height = "100vh";
         iframe.allowFullscreen = true;
-        iframe.src = url;
-        console.log("Website loading in iframe with URL:", url);
-
-        // Handle iframe load
         iframe.onload = function () {
             console.log("Iframe content loaded:", url);
             // Request fullscreen when iframe loads
@@ -106,13 +101,24 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("User input changed:", userInput);
     });
 
-    // Set up a sample test to verify functionality
-    let sampleInput = "https://www.example.com";
-    console.log("Testing with sample input:", sampleInput);
-    loadWebsite(sampleInput);
-    
-    // Debugging message when the DOM is fully loaded
-    console.log("DOM is fully loaded, ready to interact.");
-});
+    // Set up event listener for Enter key to submit the form and load the website
+    urlInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent page reload
+            const input = urlInput.value.trim();
+            let url;
 
-console.log("uv-scripts.js initialized");
+            // Check if input is a URL or a search query
+            if (input.startsWith('http://') || input.startsWith('https://')) {
+                url = input;
+            } else {
+                const searchEngine = searchEngineSelect.value;
+                url = searchEngine.replace('%s', encodeURIComponent(input));
+            }
+
+            loadWebsite(url); // Load the website in the iframe
+        }
+    });
+
+    console.log("uv-scripts.js initialized");
+});
