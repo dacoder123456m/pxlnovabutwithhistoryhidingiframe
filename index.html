@@ -120,7 +120,7 @@ document.getElementById("placeholder").addEventListener("click", setRandomPlaceh
 </p>
       </header>
       <button id="startButton" onclick="loadWebsite('/web/index.html')">Start Browsing</button>
-      <button id="redirectButton" onclick="loadWebsite('/web/settings.html')">Settings</button>
+      <button id="redirectButton">Settings</button>
     </main>
 
     <!-- Hidden iframe -->
@@ -146,6 +146,10 @@ document.getElementById("placeholder").addEventListener("click", setRandomPlaceh
         document.body.className = "fullScreen";
         requestFullScreen(document.body);
       }
+
+      document.getElementById("redirectButton").addEventListener("click", redirect);
+
+      function redirect(){ window.location = "./settings.html"; }
     </script>
     <script src="index.js"></script>
   </body>
